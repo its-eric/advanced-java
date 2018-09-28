@@ -3,6 +3,7 @@ package com.elte.practice1;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Main {
@@ -71,6 +72,7 @@ public class Main {
         System.out.println("Tuesday is earlier than Friday: " + (lambda.apply(Weekday.TUESDAY, Weekday.FRIDAY) ? "pass" : "fail"));
     }
 
+
     private static void exercise4(String[] args) {
         Arrays.sort(args, Comparator.comparingInt(a -> a.toLowerCase().split("a").length));
         for(String arg : args) {
@@ -78,11 +80,34 @@ public class Main {
         }
     }
 
+
+    /**
+     * Sort the command line arguments so that those arguments that contains names of weekdays come first.
+     */
+    private static void exercise5() {
+
+    }
+
+    private static void exercise6() {
+
+    }
+
+
+    /**
+     * Create the method compose that takes two functions and returns their composition, which is another function.
+     */
+    private static Function compose(Function f1, Function f2) {
+        return f1.compose(f2);
+    }
+
     public static void main(String[] args) {
         exercise1();
         exercise2();
         exercise3();
         exercise4(args);
+        exercise5();
+        exercise6();
+        System.out.println("2 + 1 * 2 should be 6: " + (compose(n -> (int) n + 1, n -> (int) n * 2).apply(2).equals(6) ? "pass" : "fail"    ));
     }
 
 }
