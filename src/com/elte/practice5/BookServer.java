@@ -9,21 +9,31 @@ import java.util.Scanner;
  * Make a simple client-server application whose parts communicate using serialization.
  * Use the Book and BookStore classes from the previous exercise.
  */
-public class BookServer {
+public class BookServer implements Runnable {
 
-    public static void main(String[] args) {
-
+    @Override
+    public void run() {
         System.out.println("Server is running and awaiting connection...");
         try (
-            ServerSocket ss = new ServerSocket(12345);
-            Socket s = ss.accept();
-            Scanner sc = new Scanner(s.getInputStream(), "UTF-8");
-            PrintWriter pw = new PrintWriter(s.getOutputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream()))
+            ServerSocket ss = new ServerSocket(12345)
+        )
         {
+            while(true) {
+                handleClient(ss);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private static void handleClient(ServerSocket ss) {
+        try(
+            Socket s = ss.accept();
+            ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream())
+        ) {
             // Takes the name of a book from the client.
-            String title = sc.nextLine();
+            String title = (String) ois.readObject();
 
             // Tries to load the books from a file.
             BookStore bookStore = new BookStore();
@@ -39,14 +49,14 @@ public class BookServer {
              */
             Book requestedBook = bookStore.bookStore.get(title);
             if(requestedBook == null) {
-                pw.write("false");
+                oos.writeBoolean(false);
             } else {
-                pw.write("true");
+                oos.writeBoolean(true);
                 oos.writeObject(requestedBook);
             }
-
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
 }

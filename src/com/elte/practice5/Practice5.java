@@ -1,6 +1,8 @@
 package com.elte.practice5;
 
 import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 // @param <I> - Functional Interface Type
 class Recursive<I> {
@@ -36,5 +38,29 @@ public class Practice5 {
         scienceFiction.addSomeBooks();
         scienceFiction.saveBooks("test.txt");
         scienceFiction.loadBooks("test.txt");
+
+        Thread server = new Thread(new BookServer());
+
+        Thread bookClient1 = new Thread(new BookClient("Dune"));
+        Thread bookClient2 = new Thread(new BookClient("20 Thousand Leagues Under The Sea"));
+        Thread bookClient3 = new Thread(new BookClient("Neuromancer"));
+
+        server.start();
+        Thread.sleep(500);
+
+        bookClient1.start();
+        bookClient2.start();
+        bookClient3.start();
+
+        Thread gossipServer = new Thread(new GossipServer());
+        gossipServer.start();
+        Thread.sleep(500);
+
+        IntStream.range(0, 100).forEach(
+                n -> {
+                    new Thread(new CuriousClient()).start();
+                }
+        );
+
     }
 }

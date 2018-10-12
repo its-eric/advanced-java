@@ -10,9 +10,9 @@ public class BookStore {
 
     // Puts some predefined books into the map, to serve as initial data.
     public void addSomeBooks() {
-        bookStore.put("20 Thousand Leagues Under the Sea",
+        bookStore.put("20 Thousand Leagues Under The Sea",
                 new Book(
-                    "20 Thousand Leagues Under the Sea",
+                    "20 Thousand Leagues Under The Sea",
                     "Jules Verne",
                     1890,
                     500));
@@ -31,16 +31,9 @@ public class BookStore {
         File file = new File(fileName);
         try (
             FileOutputStream outputStream = new FileOutputStream(file);
-            ObjectOutputStream ois = new ObjectOutputStream(outputStream);
+            ObjectOutputStream ois = new ObjectOutputStream(outputStream)
         ) {
-            bookStore.forEach((bookName, book) -> {
-                try {
-                    ois.writeObject(book);
-                    System.out.println("Saved " + bookName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            ois.writeObject(this.bookStore);
         } catch (IOException e) {
             return false;
         }
@@ -53,15 +46,9 @@ public class BookStore {
         File file = new File(fileName);
         try (
             FileInputStream inputStream = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(inputStream);
+            ObjectInputStream ois = new ObjectInputStream(inputStream)
         ) {
-            while(inputStream.available() > 0) {
-                Book tmp = (Book) ois.readObject();
-                if(tmp == null) break;
-                else {
-                    bookStore.put(tmp.title, tmp);
-                }
-            }
+            this.bookStore = (Map<String, Book>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }
