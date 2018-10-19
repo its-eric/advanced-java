@@ -7,7 +7,7 @@ public class RecursiveFibonacci implements Runnable {
     Recursive<Function<Integer, Long>> rec;
     int n;
 
-    RecursiveFibonacci(Recursive<Function<Integer, Long>> rec, int n) {
+    public RecursiveFibonacci(Recursive<Function<Integer, Long>> rec, int n) {
         this.rec = rec;
         this.n = n;
     }
