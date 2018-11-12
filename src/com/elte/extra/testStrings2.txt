@@ -1,0 +1,5 @@
+you can Java test
+this Java file
+by looking for the string
+it should be a sufficient
+test Java case
