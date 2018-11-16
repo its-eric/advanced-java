@@ -1,18 +1,22 @@
 package com.elte.extra;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class Search {
-    public static void main(String[] args) {
+public class SearchOrdered {
+
+    public static void main(@NotNull String[] args) {
+
         try {
             Stream<Path> paths = Files.walk(FileSystems.getDefault().getPath("."))
-                    .filter(path -> ! path.toFile().isDirectory());
+                                        .filter(path -> ! path.toFile().isDirectory());
             String searchTerm = args[0];
-            paths.parallel().forEach(p -> {
+            paths.forEachOrdered(p -> {
                 Thread t = new Thread(new SearchThread(p, searchTerm));
                 t.start();
             });
